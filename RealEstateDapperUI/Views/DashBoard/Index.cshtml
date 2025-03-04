@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <!-- Sale & Revenue Start -->
+            @await Component.InvokeAsync("_DashBoardStatisticPartial")
+            <!-- Sale & Revenue End -->
+            <!-- Sales Chart Start -->
+            @await Component.InvokeAsync("_DashBoardChartPartial")
+            <!-- Sales Chart End -->
+            <!-- Recent Sales Start -->
+            @await Component.InvokeAsync("_DashBoarRacentSalePartial")
+            <!-- Recent Sales End -->
+            <!-- Widgets Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    
+                    @await Component.InvokeAsync("_DashBoardLast4MessagePartial")
+
+                    @await Component.InvokeAsync("_DashBoardCalenderPartial")
+                    
+                    @await Component.InvokeAsync("_DashBoardToDoListPartial")
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

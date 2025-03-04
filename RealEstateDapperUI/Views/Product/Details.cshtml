@@ -1,0 +1,72 @@
+﻿@model UpdateProductDTO
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Admin/Index.cshtml";
+}
+
+<style>
+    .form-control {
+        background-color: black !important; /* Input arka planı siyah */
+        color: red !important; /* Yazılar kırmızı */
+        border: 1px solid red; /* Kenarlık kırmızı */
+    }
+
+    label {
+        color: red !important;
+    }
+
+    img {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        border: 2px solid red;
+        display: block;
+        margin-top: 10px;
+    }
+</style>
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4" >İlan Detay Sayfası</h6>
+                <form method="post">
+                    <input type="hidden" asp-for="ProductID" />
+
+                    <label>İlan Başlığı</label>
+                    <input type="text" asp-for="Title" class="form-control" readonly />
+                    <br />
+
+                    <label>Şehir</label>
+                    <input type="text" asp-for="City" class="form-control" readonly />
+                    <br />
+
+                    <label>İlçe</label>
+                    <input type="text" asp-for="Disrict" class="form-control" readonly />
+                    <br />
+
+                    <label>Adres</label>
+                    <input type="text" asp-for="Address" class="form-control" readonly />
+                    <br />
+
+                    <label>Görsel</label>
+                    <input type="text" asp-for="CoverImage" class="form-control" readonly />
+                    <img src="@Model.CoverImage" alt="İlan Görseli" />
+                    <br />
+
+                    <label>Açıklama</label>
+                    <input type="text" asp-for="Description" class="form-control" readonly />
+                    <br />
+
+                    <label>Türü</label>
+                    <input type="text" asp-for="Type" class="form-control" readonly />
+                    <br />
+
+                    <label>Eklendiği Tarih</label>
+                    <input type="text" value="@Model.Adverstisement.ToString("dd.MM.yyyy")" class="form-control" readonly />
+                    <br />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

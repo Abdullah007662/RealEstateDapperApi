@@ -1,0 +1,81 @@
+﻿@using Microsoft.AspNetCore.SignalR
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!-- SignalR JavaScript kütüphanesini dahil et -->
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // 🔹 SignalR hub bağlantısı oluşturuluyor.
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl("https://localhost:44397/signalrhub") // API tarafındaki SignalR endpoint adresi
+                .withAutomaticReconnect() // Bağlantı koparsa otomatik yeniden bağlan
+                .build();
+
+            // 🔹 Bağlantı durumu değiştikçe ekrana yaz
+            connection.onclose(() => {
+                console.warn("Bağlantı kapandı! Yeniden bağlanıyor...");
+                $("#connstatus").text("Disconnected");
+            });
+
+            connection.onreconnecting(() => {
+                console.warn("Yeniden bağlanıyor...");
+                $("#connstatus").text("Reconnecting...");
+            });
+
+            connection.onreconnected(() => {
+                console.log("Yeniden bağlandı!");
+                $("#connstatus").text("Connected");
+            });
+
+            // 🔹 Bağlantıyı başlat
+            connection.start()
+                .then(function () {
+                    $("#connstatus").text("Connected"); // Başarılı bağlandıysa bağlantı durumunu güncelle
+                    console.log("Bağlantı başarılı!");
+
+                    // 5 saniyede bir sunucuya istek at
+                    setInterval(() => {
+                        if (connection.state === "Connected") {
+                            connection.invoke("SendCategoryCount")
+                                .catch(function (err) {
+                                    console.error("SendCategoryCount çağrısı başarısız:", err.toString());
+                                });
+                        }
+                    }, 1000); // Her 1 saniyede bir çalıştır 
+                })
+                .catch(function (err) {
+                    console.error("Bağlantı hatası:", err.toString()); // Hata yakala ve console'a yazdır
+                    $("#connstatus").text("Failed to connect");
+                });
+
+            // 🔹 Sunucudan mesaj almayı dinleyen bir event ekleyelim
+            connection.on("ReceiveMessage", function (message) {
+                alert("Gelen Mesaj: " + message); // Gelen mesajı göster
+            });
+
+            // 🔹 Sunucudan kategori sayısını almak için event dinleyici
+            connection.on("ReceiverCategoryCount", function (value) {
+                $("#categorycount").text(value); // Güncellenen kategori sayısını ekrana yazdır
+                console.log("Güncellenen kategori sayısı:", value);
+            });
+        });
+    </script>
+}
+
+<!-- Bağlantı durumunu göstermek için HTML -->
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <div class="alert alert-warning">
+            Bağlantı Durumu: <strong id="connstatus">Bağlantı Bekleniyor...</strong>
+        </div>
+    </div>
+    <div class="col-md-8 offset-2">
+        <div class="alert alert-primary">
+            Kategori Sayısı: <strong id="categorycount">0</strong>
+        </div>
+    </div>
+</div>

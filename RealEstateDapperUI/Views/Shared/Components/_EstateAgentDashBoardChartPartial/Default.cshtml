@@ -1,0 +1,76 @@
+﻿@model List<ResultChartDTO>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <style>
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        canvas {
+            width: 100%;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chart-container">
+        <canvas id="myChart1"></canvas>
+        <canvas id="myChart2"></canvas>
+    </div>
+
+    <script>
+        // Razor Model Verilerini JSON'a Çevirme
+        const xValues = @Html.Raw(Json.Serialize(Model.Select(x => x.City)));
+        const yValues = @Html.Raw(Json.Serialize(Model.Select(x => x.CityCount)));
+
+        const barColors = [
+            "#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145",
+            "#ff6384", "#36a2eb", "#cc65fe", "#ffce56", "#4bc0c0"
+        ];
+
+        // Birinci Grafik
+        new Chart("myChart1", {
+            type: "doughnut",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors.slice(0, xValues.length),
+                    data: yValues
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Şehir-İlan İstatistiği 1"
+                }
+            }
+        });
+
+        // İkinci Grafik
+        new Chart("myChart2", {
+            type: "doughnut",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors.slice(0, xValues.length),
+                    data: yValues
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Şehir-İlan İstatistiği 2"
+                }
+            }
+        });
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+﻿@model List<ResultProductDTO>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Admin/Index.cshtml";
+    int count = 0;
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-secondary rounded h-100 p-4">
+                <h6 class="mb-4">İlan Listesi</h6>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">İlan Başlığı</th>
+                                <th scope="col">Şehir</th>
+                                <th scope="col">İlçe</th>
+                                <th scope="col">Kategori</th>
+                                <th scope="col">Fiyat</th>
+                                <th scope="col">Türü</th>
+                                <th scope="col">Sil</th>
+                                <th scope="col">Güncelle</th>
+                                <th scope="col">Sitede Gör</th>
+                                <th scope="col">Günün Fırsatı</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <td scope="row">@count</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.City</td>
+                                    <td>@item.Disrict</td>
+                                    <td>@item.CategoryName</td>
+                                    <td>@item.Price</td>
+                                    <td>@item.Type</td>
+                                    <td><a href="/Product/DeleteProduct/@item.ProductID" class="btn btn-outline-danger m-2">Sil</a></td>
+                                    <td><a href="/Product/UpdateProduct/@item.ProductID" class="btn btn-outline-success m-2">Güncelle</a></td>
+                                    <td><a href="/Product/DetailProduct/@item.ProductID" class="btn btn-outline-warning m-2">Sitede Gör</a></td>
+                                    <td>
+                                        @if (item.DealOfTheDay == true)
+                                        {
+                                            <a href="/Product/ProductDealOfTheDayStatusChangeToFalse/@item.ProductID" class="btn btn-light rounded-pill m-2">Pasif Yap</a>
+                                        }
+                                        @if (item.DealOfTheDay == false)
+                                        {
+                                            <a href="/Product/ProductDealOfTheDayStatusChangeToTrue/@item.ProductID" class="btn btn-info rounded-pill m-2">Aktif Yap</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <a href="/Product/CreateProduct/" class="btn btn-outline-info m-2">Yeni İlan Girişi</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
